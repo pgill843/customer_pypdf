@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "user_id": "51f5edbfeeda",
-  "synced_at": "2026-06-28T17:57:08.192073+00:00",
+  "synced_at": "2026-06-28T17:57:23.815506+00:00",
   "git_email_domain": "paigeurig.com",
   "onboarding": {
     "first_query": {
@@ -33,7 +33,7 @@
         "pass_rate": 1.0,
         "top_violations": []
       },
-      "sessions_ended": 13
+      "sessions_ended": 14
     },
     "window_30d": {
       "query_runs": 2,
@@ -51,7 +51,7 @@
         "pass_rate": 1.0,
         "top_violations": []
       },
-      "sessions_ended": 13
+      "sessions_ended": 14
     },
     "all_time": {
       "query_runs": 2,
@@ -69,7 +69,7 @@
         "pass_rate": 1.0,
         "top_violations": []
       },
-      "sessions_ended": 13
+      "sessions_ended": 14
     }
   }
 }
