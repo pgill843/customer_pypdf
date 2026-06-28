@@ -60,4 +60,25 @@ fi
 echo "==> Health check"
 python scripts/doctor.py || echo "doctor reported issues (see above) — bootstrap continued (fail-open)"
 
+# 5. pypdf dev/test virtualenv (separate from .venv) --------------------------
+# The repo also ships the pypdf library + its test suite. Its pinned test deps
+# (requirements/ci-3.11.txt) pin typing-extensions to a version that conflicts
+# with the MCP server's pydantic, so pypdf development uses its own .venv-pypdf.
+# Fail-open: a problem here must never block the Newbie/MCP setup above.
+if [ "${NB_SKIP_PYPDF_VENV:-0}" = "1" ]; then
+  echo "==> NB_SKIP_PYPDF_VENV=1 — skipping pypdf dev venv setup"
+elif [ -f requirements/ci-3.11.txt ] && [ -f pyproject.toml ]; then
+  echo "==> Setting up pypdf dev/test venv at .venv-pypdf"
+  (
+    set -e
+    if [ ! -x "$REPO_ROOT/.venv-pypdf/bin/python" ]; then
+      "$PYTHON_BIN" -m venv "$REPO_ROOT/.venv-pypdf"
+    fi
+    # shellcheck disable=SC1091
+    source "$REPO_ROOT/.venv-pypdf/bin/activate"
+    python -m pip install --upgrade pip --quiet
+    python -m pip install -r requirements/ci-3.11.txt -e . --quiet
+  ) || echo "pypdf dev venv setup reported issues (see above) — bootstrap continued (fail-open)"
+fi
+
 echo "==> Newbie cloud bootstrap complete"
