@@ -10,11 +10,14 @@ from pypdf.merge_pdfs import main, merge_pdfs
 
 from . import RESOURCE_ROOT
 
+FIRST_PDF = RESOURCE_ROOT / "toy.pdf"
+SECOND_PDF = RESOURCE_ROOT / "AutoCad_Simple.pdf"
+
 
 def test_merge_pdfs_combines_page_counts(tmp_path):
     """Merged output contains all pages from both inputs in order."""
-    first = RESOURCE_ROOT / "toy.pdf"
-    second = RESOURCE_ROOT / "hello-world.pdf"
+    first = FIRST_PDF
+    second = SECOND_PDF
     output = tmp_path / "merged.pdf"
 
     merge_pdfs(first, second, output)
@@ -26,8 +29,8 @@ def test_merge_pdfs_combines_page_counts(tmp_path):
 
 def test_main_writes_merged_pdf(tmp_path):
     """CLI entry point merges two PDFs to the requested output path."""
-    first = RESOURCE_ROOT / "toy.pdf"
-    second = RESOURCE_ROOT / "hello-world.pdf"
+    first = FIRST_PDF
+    second = SECOND_PDF
     output = tmp_path / "cli-merged.pdf"
     argv = [
         "merge_pdfs",
@@ -41,7 +44,8 @@ def test_main_writes_merged_pdf(tmp_path):
         main()
 
     assert output.is_file()
-    assert len(PdfReader(output).pages) == 2
+    expected_pages = len(PdfReader(first).pages) + len(PdfReader(second).pages)
+    assert len(PdfReader(output).pages) == expected_pages
 
 
 def test_main_missing_input_file_exits_with_error():
